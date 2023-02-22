@@ -1,49 +1,84 @@
-package main
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-import (
-	"testing"
-)
+    #[test]
+    fn test_sum() {
+        assert_eq!(sum(2, 2), 4);
+        assert_eq!(sum(5, 5), 10);
+        assert_eq!(sum(-1, 1), 0);
+    }
 
-func TestAddition(t *testing.T) {
-	result := 2 + 2
-	expected := 4
-	if result != expected {
-		t.Errorf("Expected 2 + 2 to equal %d, but got %d", expected, result)
-	}
+    #[test]
+    fn test_factorial() {
+        assert_eq!(factorial(0), 1);
+        assert_eq!(factorial(1), 1);
+        assert_eq!(factorial(5), 120);
+        assert_eq!(factorial(10), 3628800);
+    }
+
+    #[test]
+    fn test_string_concatenation() {
+        let hello = String::from("hello");
+        let world = String::from("world");
+        let hello_world = String::from("hello world");
+        assert_eq!(string_concatenation(hello, world), hello_world);
+    }
+
+    #[test]
+    fn test_struct_equality() {
+        let point1 = Point { x: 1, y: 2 };
+        let point2 = Point { x: 1, y: 2 };
+        assert_eq!(point1, point2);
+    }
+
+    #[test]
+    fn test_vector_contains() {
+        let vector = vec!["one", "two", "three"];
+        let value = "two";
+        assert!(vector.contains(&value));
+    }
+
+    #[test]
+    fn test_floating_point_comparisons() {
+        let a = 0.1 + 0.2;
+        let b = 0.3;
+        assert!(approx_equal(a, b));
+    }
 }
 
-func TestSubtraction(t *testing.T) {
-	result := 5 - 3
-	expected := 2
-	if result != expected {
-		t.Errorf("Expected 5 - 3 to equal %d, but got %d", expected, result)
-	}
+fn sum(a: i32, b: i32) -> i32 {
+    a + b
 }
 
-func TestMultiplication(t *testing.T) {
-	result := 3 * 4
-	expected := 12
-	if result != expected {
-		t.Errorf("Expected 3 * 4 to equal %d, but got %d", expected, result)
-	}
+fn factorial(n: u64) -> u64 {
+    match n {
+        0 => 1,
+        1 => 1,
+        _ => n * factorial(n - 1),
+    }
 }
 
-func TestDivision(t *testing.T) {
-	result := 10 / 5
-	expected := 2
-	if result != expected {
-		t.Errorf("Expected 10 / 5 to equal %d, but got %d", expected, result)
-	}
+struct Point {
+    x: i32,
+    y: i32,
 }
 
-func TestModulus(t *testing.T) {
-	result := 7 % 3
-	expected := 1
-	if result != expected {
-		t.Errorf("Expected 7 mod 3 to equal %d, but got %d", expected, result)
-	}
+impl PartialEq for Point {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y
+    }
 }
 
+fn string_concatenation(a: String, b: String) -> String {
+    format!("{} {}", a, b)
+}
+
+fn approx_equal(a: f64, b: f64) -> bool {
+    (a - b).abs() < f64::EPSILON
+}
+
+// Tests en rust
 #[test]
 fn test_sorting() {
     let mut unsorted = vec![3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5];
@@ -467,6 +502,8 @@ fn test_database_delete() {
     let user = users.filter(username.eq("testuser")).first::<User>(&conn);
     assert!(user.is_err());
 }
+
+
 
 func TestMain(m *testing.M) {
 	// Run all tests
